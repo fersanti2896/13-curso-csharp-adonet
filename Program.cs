@@ -10,35 +10,30 @@ Console.WriteLine("¡ADO.NET Y BASES DE DATOS!");
 using IHost host = Host.CreateDefaultBuilder(args).Build();
 
 var configuration = host.Services.GetService<IConfiguration>();
-var conexion = configuration!.GetConnectionString("cadenaConexion");
-
-Console.Write("Escribe el nombre a agregar: ");
-var nombre = Console.ReadLine();    
+var conexion = configuration!.GetConnectionString("cadenaConexion");  
 
 try {
     using (SqlConnection connection = new SqlConnection(conexion)) { 
         /* Abrimos la conexión */
         connection.Open();
 
-        Console.WriteLine($"Conexión Abierta");
+        Console.WriteLine($"Conexión Abierta\n");
 
-        var query = "Insertar_Persona";
+        var query = "Leer_Personas";
 
         using (SqlCommand command = new SqlCommand(query, connection)) {
             command.CommandType = CommandType.StoredProcedure;
-            command.Parameters.Add(new SqlParameter("@Nombre", nombre));
 
-            var paramId = new SqlParameter { 
-                ParameterName = "@Id",
-                Direction = ParameterDirection.Output,
-                DbType = DbType.Int32
-            };
 
-            command.Parameters.Add(paramId);
-            await command.ExecuteNonQueryAsync();
+            using (SqlDataAdapter adaptador = new SqlDataAdapter(command)) { 
+                var dt = new DataTable();
 
-            var id = (int)paramId.Value;
-            Console.WriteLine($"Id de la persona: { id }");
+                adaptador.Fill(dt);
+
+                foreach (DataRow fila in dt.Rows) {
+                    Console.WriteLine($"{fila["Id"]} | {fila["Nombre"]}");
+                }
+            }
         }
     }
 } catch (Exception ex) {
