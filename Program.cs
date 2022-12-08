@@ -1,4 +1,5 @@
 ﻿
+using adonet.Models;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,19 +20,30 @@ try {
 
         Console.WriteLine($"Conexión Abierta\n");
 
-        var query = "Leer_Personas";
+        var query = "Personas_Productos";
 
         using (SqlCommand command = new SqlCommand(query, connection)) {
             command.CommandType = CommandType.StoredProcedure;
 
 
             using (SqlDataAdapter adaptador = new SqlDataAdapter(command)) { 
-                var dt = new DataTable();
+                var dt = new DataSet();
 
                 adaptador.Fill(dt);
 
-                foreach (DataRow fila in dt.Rows) {
-                    Console.WriteLine($"{fila["Id"]} | {fila["Nombre"]}");
+                var tablaPersonas = dt.Tables[0];
+                var tablaProductos = dt.Tables[1];
+
+                Console.WriteLine($"Tabla Personas:\n");
+
+                foreach (DataRow fila in tablaPersonas.Rows) {
+                    Console.WriteLine($"{ fila["Id"] } | { fila["Nombre"] }");
+                }
+                
+                Console.WriteLine($"Tabla Productos:\n");
+
+                foreach (DataRow fila in tablaProductos.Rows) {
+                    Console.WriteLine($"{ fila["Id"] } | { fila["Nombre"] } | { fila["Precio"] }");
                 }
             }
         }
