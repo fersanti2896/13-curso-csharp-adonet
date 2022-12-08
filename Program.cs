@@ -3,6 +3,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Data;
 
 Console.WriteLine("¡ADO.NET Y BASES DE DATOS!");
 
@@ -21,15 +22,23 @@ try {
 
         Console.WriteLine($"Conexión Abierta");
 
-        var query = @"INSERT INTO Personas(Nombre)
-                      VALUES(@Nombre)";
+        var query = "Insertar_Persona";
 
         using (SqlCommand command = new SqlCommand(query, connection)) {
+            command.CommandType = CommandType.StoredProcedure;
             command.Parameters.Add(new SqlParameter("@Nombre", nombre));
 
-            var filas = await command.ExecuteNonQueryAsync();
+            var paramId = new SqlParameter { 
+                ParameterName = "@Id",
+                Direction = ParameterDirection.Output,
+                DbType = DbType.Int32
+            };
 
-            Console.WriteLine($"Filas afectadas: { filas }");
+            command.Parameters.Add(paramId);
+            await command.ExecuteNonQueryAsync();
+
+            var id = (int)paramId.Value;
+            Console.WriteLine($"Id de la persona: { id }");
         }
     }
 } catch (Exception ex) {
