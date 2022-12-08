@@ -3,7 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32414.318
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "adonet", "adonet.csproj", "{66B876D0-07DF-473E-878E-370532B1753E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "adonet", "adonet.csproj", "{66B876D0-07DF-473E-878E-370532B1753E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D0416532-FD41-4212-B5B6-7ABCA936B4F3}"
+	ProjectSection(SolutionItems) = preProject
+		appsettings.json = appsettings.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
